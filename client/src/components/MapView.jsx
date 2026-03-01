@@ -55,7 +55,7 @@ const MapEvents = ({ role, socket, roomId, setMapState }) => {
     },
   });
 
-  // 🔥 Live GPS tracking (Tracker only)
+  //Live GPS tracking (Tracker only)
   useEffect(() => {
     if (role !== "tracker") return;
 
@@ -100,7 +100,7 @@ const MapEvents = ({ role, socket, roomId, setMapState }) => {
     };
   }, [role, socket, roomId, map, setMapState]);
 
-  // 🔄 Sync for tracked users
+  //Sync for tracked users
   useEffect(() => {
     const handleSync = (data) => {
       if (role === "tracker") return;

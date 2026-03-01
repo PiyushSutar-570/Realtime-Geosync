@@ -1,5 +1,4 @@
 // utils/throttle.js
-
 export const throttle = (fn, delay) => {
   let lastCall = 0;
 
