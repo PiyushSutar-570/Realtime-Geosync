@@ -1,8 +1,8 @@
 # 🌍 GeoSync – Real-Time Tracker & Follower Map Sync
 
 🔗 **Live Demo**  
-Frontend: https://your-frontend.vercel.app  
-Backend: https://your-backend.onrender.com  
+Link : https://realtime-geosync.onrender.com 
+
 
 GitHub Repo:  
 https://github.com/PiyushSutar-570/Realtime-Geosync
@@ -251,33 +251,6 @@ npm run dev
   ```
   VITE_SOCKET_URL=https://your-backend.onrender.com
   ```
-
----
-
-# 🏆 Assignment Requirement Coverage
-
-| Requirement | Status |
-|------------|--------|
-| Room-based join | ✅ |
-| Role assignment | ✅ |
-| Single tracker enforcement | ✅ |
-| Real-time sync | ✅ |
-| HUD overlay | ✅ |
-| Role badge | ✅ |
-| Throttle handling | ✅ |
-| Tracker disconnect handling | ✅ |
-| Precision handling | ✅ |
-| Production deployment | ✅ |
-
----
-
-# 🌟 Future Enhancements
-
-- Auto-assign new tracker on disconnect
-- Re-sync button
-- Dark mode
-- Persistent sessions using database
-- User-specific colored markers
 
 ---
 
