@@ -33,6 +33,25 @@ const MapEvents = ({ role, socket, roomId, setMapState }) => {
 
       throttledRef.current(center, zoom);
     },
+
+  //NEW: Click support
+      click(e) {
+        if (role !== "tracker") return;
+
+        const { lat, lng } = e.latlng;
+
+        const data = {
+          lat,
+          lng,
+          zoom: map.getZoom(),
+        };
+
+        setMapState(data);
+        socket.emit("map-move", { roomId, data });
+
+        // Optional: center map to clicked position
+        map.setView([lat, lng], map.getZoom());
+      },
   });
 
   useEffect(() => {
