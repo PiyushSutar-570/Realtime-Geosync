@@ -1,87 +1,145 @@
-# 🌍 GeoSync – Real-Time Map Synchronization (Tracker & Follower)
+# 🌍 GeoSync – Real-Time Tracker & Follower Map Sync
 
-## 📌 Overview
+🔗 **Live Demo**  
+Frontend: https://your-frontend.vercel.app  
+Backend: https://your-backend.onrender.com  
 
-**GeoSync** is a real-time map synchronization system built using React, Node.js, Express, Socket.io, and Leaflet.
-
-The application allows two user roles:
-
-- **Tracker** – Controls the map movement.
-- **Tracked** – Follows the Tracker’s map movement in real-time.
-
-All map interactions (pan and zoom) are synchronized instantly using WebSockets with optimized throttling for smooth performance.
+GitHub Repo:  
+https://github.com/PiyushSutar-570/Realtime-Geosync
 
 ---
 
-# 🚀 Features
+## 📌 Overview
 
-## 🔗 Room-Based Connection System
-- Join session using a unique Room ID
-- Select role (Tracker / Tracked)
-- Server enforces a single Tracker per room
-- Live participant list with role indicators
+GeoSync is a real-time collaborative map synchronization system built using:
+
+- React (Vite)
+- Node.js + Express
+- Socket.io
+- Leaflet.js
+- Tailwind CSS
+
+It enables two users to connect in a shared session where:
+
+- **Tracker** controls the map
+- **Tracked** follows the tracker’s movements in real time
+
+All map movements (pan, zoom, and click location) are synchronized instantly using WebSockets.
+
+---
+
+# 🚀 Core Features
+
+## 🔐 Room-Based Session System
+- Join via unique Room ID
+- Role selection (Tracker / Tracked)
+- Server-enforced single tracker per room
+- Live participants list
+- Copy Room ID feature
 - Leave room functionality
 
-## 🔄 Real-Time Synchronization
-- Tracker’s map movements are broadcast via Socket.io
-- Tracked user’s map updates instantly
-- Latency maintained under 100ms
-- Smooth animated transitions
-- Server-side tracker validation
+---
 
-## 🖥️ Interactive UI
+## 🔄 Real-Time Map Synchronization
+- Tracker pan/zoom emits coordinates via Socket.io
+- Tracked user receives updates instantly
+- Marker updates on map click
+- Smooth animated transitions
+- Latency optimized under 100ms
+- Server validates tracker before broadcasting
+
+---
+
+## 📍 Interactive Map Behavior
+- Marker moves to clicked location (Tracker only)
+- Click-based sync across users
+- Marker reflects current shared state
+- High precision float handling (6 decimal places display)
+
+---
+
+## 🖥️ Modern UI
 - Floating HUD showing:
-  - Latitude (6 decimal precision)
-  - Longitude (6 decimal precision)
+  - Latitude
+  - Longitude
   - Zoom level
   - Connection status
 - Role badge:
-  - 🔴 Broadcasting (Tracker)
-  - 🟢 Syncing (Tracked)
+  - 🔴 Broadcasting
+  - 🟢 Syncing
 - Sidebar includes:
-  - Room ID (copy feature)
-  - User name
-  - Role display
+  - Room ID (copy option)
+  - Username
+  - Role indicator
   - Live clock
-  - Participant list
-  - Leave room button
+  - Active participants
+  - Leave Room button
 
-## ⚙️ Performance Optimizations
-- Throttled map event emission (100ms)
-- No socket flooding during smooth pan
+---
+
+# ⚙️ Performance Optimizations
+
+- Throttle (100ms) prevents socket flooding
+- `moveend` used instead of continuous move events
+- Stable throttle using `useRef`
 - Proper socket listener cleanup
-- Memory-safe architecture
+- Backend remains source of truth (frontend does not assume success)
 
-## 🛡️ Error Handling
-- Server-side role validation
-- Map data validation
-- Tracker disconnect detection
-- Graceful connection status handling
+---
+
+# 🛡️ Production-Ready Architecture
+
+## Backend Authority
+Frontend updates UI only after receiving:
+
+```
+joined-success
+```
+
+Server rejects:
+- Multiple trackers
+- Invalid roles
+- Invalid map data
+
+---
+
+## Environment-Based Configuration
+
+Frontend `.env`:
+```
+VITE_SOCKET_URL=https://your-backend.onrender.com
+```
+
+Backend `.env`:
+```
+PORT=5000
+CLIENT_URL=https://your-frontend.vercel.app
+```
 
 ---
 
 # 🏗️ Tech Stack
 
 ## Frontend
-- React.js
+- React (Vite)
 - Tailwind CSS
 - React-Leaflet
 - Socket.io-client
 
 ## Backend
 - Node.js
-- Express.js
+- Express
 - Socket.io
 
-## Map Library
-- Leaflet.js (OpenStreetMap tiles)
+## Map Tiles
+- OpenStreetMap (Leaflet)
 
 ---
 
 # 📂 Project Structure
 
 ```
-real-time-geo-sync/
+Realtime-Geosync/
 │
 ├── client/
 │   ├── src/
@@ -95,7 +153,6 @@ real-time-geo-sync/
 │   │   │   └── throttle.js
 │   │   ├── App.jsx
 │   │   └── main.jsx
-│   └── package.json
 │
 ├── server/
 │   ├── socket/
@@ -103,19 +160,38 @@ real-time-geo-sync/
 │   ├── utils/
 │   │   └── roomManager.js
 │   ├── server.js
-│   └── package.json
 │
 └── README.md
 ```
 
 ---
 
-# ⚙️ Setup Instructions
+# 🧪 How It Works
+
+### Real-Time Flow
+
+```
+Tracker moves or clicks map
+        ↓
+Map state extracted (lat, lng, zoom)
+        ↓
+Socket emits "map-move"
+        ↓
+Server validates tracker
+        ↓
+Broadcast to room
+        ↓
+Tracked updates map view with animation
+```
+
+---
+
+# ⚙️ Local Setup
 
 ## 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/<your-username>/Realtime-Geosync.git
+git clone https://github.com/PiyushSutar-570/Realtime-Geosync.git
 cd Realtime-Geosync
 ```
 
@@ -128,7 +204,7 @@ cd server
 npm install
 ```
 
-Create a `.env` file inside `server/`:
+Create `.env` inside `server/`:
 
 ```
 PORT=5000
@@ -141,12 +217,6 @@ Start backend:
 npm run dev
 ```
 
-Server runs on:
-
-```
-http://localhost:5000
-```
-
 ---
 
 ## 3️⃣ Frontend Setup
@@ -157,111 +227,57 @@ npm install
 npm run dev
 ```
 
-Frontend runs on:
+---
 
-```
-http://localhost:5173
-```
+# 🌍 Deployment
+
+## Backend (Render)
+- Root Directory: `server`
+- Build Command: `npm install`
+- Start Command: `npm start`
+- Set `CLIENT_URL` to your frontend production URL
+
+## Frontend (Vercel / Static Hosting)
+- Root Directory: `client`
+- Build Command:
+  ```
+  npm install && npm run build
+  ```
+- Publish Directory:
+  ```
+  dist
+  ```
+- Set:
+  ```
+  VITE_SOCKET_URL=https://your-backend.onrender.com
+  ```
 
 ---
 
-# 🧪 How To Test
-
-1. Open two browser tabs.
-2. Enter the same Room ID.
-3. One selects **Tracker**.
-4. The other selects **Tracked**.
-5. Move the map in the Tracker tab.
-6. The Tracked tab updates instantly.
-
----
-
-# 🧠 Architecture Overview
-
-## Room Management
-- Rooms stored in memory using `Map`
-- Single Tracker enforced per room
-- Participants tracked via socket IDs
-- Automatic room cleanup when empty
-
-## Real-Time Flow
-
-```
-Tracker moves map
-        ↓
-Center (lat, lng) + zoom extracted
-        ↓
-Socket emits "map-move"
-        ↓
-Server validates tracker
-        ↓
-Broadcast to room
-        ↓
-Tracked updates map view
-```
-
----
-
-# ⚡ Performance Handling
-
-- Throttle limits socket emissions to prevent flooding
-- `moveend` event used to reduce unnecessary updates
-- High precision floats maintained internally
-- Smooth animation enabled for tracked users
-
----
-
-# 🔐 Security Considerations
-
-- Frontend role is NOT trusted
-- Server validates tracker before broadcasting
-- Map data structure validated
-- Room-based socket isolation (no global broadcasting)
-
----
-
-# 🏆 Assignment Requirement Satisfaction
+# 🏆 Assignment Requirement Coverage
 
 | Requirement | Status |
 |------------|--------|
-| Room-based system | ✅ |
-| Role selection | ✅ |
-| Real-time synchronization | ✅ |
+| Room-based join | ✅ |
+| Role assignment | ✅ |
+| Single tracker enforcement | ✅ |
+| Real-time sync | ✅ |
 | HUD overlay | ✅ |
-| Role indicators | ✅ |
-| Throttling | ✅ |
+| Role badge | ✅ |
+| Throttle handling | ✅ |
 | Tracker disconnect handling | ✅ |
 | Precision handling | ✅ |
-| Clean architecture | ✅ |
+| Production deployment | ✅ |
 
 ---
 
-# 🌟 Future Improvements
+# 🌟 Future Enhancements
 
-- Auto-assign new tracker if tracker disconnects
-- Re-sync button for tracked users
+- Auto-assign new tracker on disconnect
+- Re-sync button
 - Dark mode
-- Persistent rooms using database
-- Deployment on Vercel + Render
-
----
-
-# 📦 Deployment
-
-Frontend: Deploy on **Vercel**  
-Backend: Deploy on **Render / Railway**
-
-Update environment variables:
-
-Frontend `.env`:
-```
-VITE_SOCKET_URL=https://your-backend-url.onrender.com
-```
-
-Backend `.env`:
-```
-CLIENT_URL=https://your-frontend.vercel.app
-```
+- Persistent sessions using database
+- User-specific colored markers
 
 ---
 
@@ -270,10 +286,10 @@ CLIENT_URL=https://your-frontend.vercel.app
 GeoSync demonstrates:
 
 - Real-time WebSocket architecture
-- State synchronization
-- Performance-aware event handling
-- Secure role validation
-- Clean and scalable code structure
-- Modern responsive UI
+- Server-authoritative role validation
+- Optimized event handling
+- Clean modular React structure
+- Scalable room-based system
+- Production deployment configuration
 
-This project fulfills all assignment requirements and showcases strong real-time system design skills.
+This project showcases strong understanding of real-time synchronization systems and modern full-stack architecture.
