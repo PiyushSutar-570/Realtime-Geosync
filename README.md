@@ -3,6 +3,7 @@
 🔗 **Live Demo**  
 Link : https://realtime-geosync.onrender.com 
 
+⚠️ Note: The backend is hosted on Render (free tier). It may take 30–60 seconds to wake up after inactivity due to cold start.
 
 GitHub Repo:  
 https://github.com/PiyushSutar-570/Realtime-Geosync
