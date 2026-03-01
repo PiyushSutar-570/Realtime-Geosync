@@ -5,6 +5,7 @@ import MapView from "./components/MapView";
 import HUD from "./components/HUD";
 import RoleBadge from "./components/RoleBadge";
 import Sidebar from "./components/Sidebar";
+
 const socket = io(import.meta.env.VITE_SOCKET_URL);
 
 function App() {
@@ -40,29 +41,40 @@ function App() {
       alert("Tracker disconnected!");
     });
 
+    //WAIT FOR SERVER CONFIRMATION
+    socket.on("joined-success", ({ roomId, role }) => {
+      setRoomId(roomId);
+      setRole(role);
+      setJoined(true);
+    });
+
+    socket.on("error-message", (msg) => {
+      alert(msg);
+    });
+
     return () => {
       socket.off("connect");
       socket.off("disconnect");
       socket.off("participants-update");
       socket.off("tracker-disconnected");
+      socket.off("joined-success");
+      socket.off("error-message");
     };
   }, []);
 
+  
   // JOIN ROOM
   const handleJoin = (room, selectedRole, username) => {
+    setName(username); // safe to store locally
+
     socket.emit("join-room", {
       roomId: room,
       role: selectedRole,
       name: username,
     });
-
-    setName(username);
-    setRoomId(room);
-    setRole(selectedRole);
-    setJoined(true);
   };
 
-  // LEAVE ROOM
+  //leave room
   const handleLeave = () => {
     socket.disconnect();
     window.location.reload();
@@ -74,36 +86,35 @@ function App() {
 
   return (
     <div className="relative">
-        {/* Map container with right padding */}
-        <div className="pr-80">
-          <MapView
-            role={role}
-            socket={socket}
-            roomId={roomId}
-            mapState={mapState}
-            setMapState={setMapState}
-          />
-        </div>
-
-        <Sidebar
-          roomId={roomId}
-          name={name}
+      <div className="pr-80">
+        <MapView
           role={role}
-          participants={participants}
-          onLeave={handleLeave}
-          myId={socket.id}
+          socket={socket}
+          roomId={roomId}
+          mapState={mapState}
+          setMapState={setMapState}
         />
-
-        <HUD
-          lat={mapState.lat}
-          lng={mapState.lng}
-          zoom={mapState.zoom}
-          status={status}
-        />
-
-        <RoleBadge role={role} />
       </div>
-    );
+
+      <Sidebar
+        roomId={roomId}
+        name={name}
+        role={role}
+        participants={participants}
+        onLeave={handleLeave}
+        myId={socket.id}
+      />
+
+      <HUD
+        lat={mapState.lat}
+        lng={mapState.lng}
+        zoom={mapState.zoom}
+        status={status}
+      />
+
+      <RoleBadge role={role} />
+    </div>
+  );
 }
 
 export default App;
