@@ -87,6 +87,15 @@ All map movements (pan, zoom, and click location) are synchronized instantly usi
 
 ---
 
+#images :
+
+<img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/2d92057a-c1fb-4874-959a-7121f4f8afba" />
+
+<img width="1919" height="916" alt="image" src="https://github.com/user-attachments/assets/6c9dc278-7e99-4484-9a23-c4a4da8de9a5" />
+
+<img width="1919" height="919" alt="image" src="https://github.com/user-attachments/assets/8b2f7b79-44f9-421b-a1d9-8c3a638da264" />
+
+
 # 🛡️ Production-Ready Architecture
 
 ## Backend Authority
