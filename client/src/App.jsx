@@ -5,7 +5,7 @@ import MapView from "./components/MapView";
 import HUD from "./components/HUD";
 import RoleBadge from "./components/RoleBadge";
 import Sidebar from "./components/Sidebar";
-const socket = io(import.meta.env.VITE_API_URL);
+const socket = io(import.meta.env.VITE_SOCKET_URL);
 
 function App() {
   const [name, setName] = useState("");
