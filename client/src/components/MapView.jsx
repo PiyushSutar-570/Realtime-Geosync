@@ -10,6 +10,7 @@ const icon = new L.Icon({
 
 const MapEvents = ({ role, socket, roomId, setMapState }) => {
   const throttledRef = useRef(null);
+  const gpsWatchRef = useRef(null);
 
   const map = useMapEvents({
     moveend() {
@@ -30,30 +31,76 @@ const MapEvents = ({ role, socket, roomId, setMapState }) => {
 
       const center = map.getCenter();
       const zoom = map.getZoom();
-
       throttledRef.current(center, zoom);
     },
 
-  //NEW: Click support
-      click(e) {
-        if (role !== "tracker") return;
+    click(e) {
+      if (role !== "tracker") return;
 
-        const { lat, lng } = e.latlng;
+      const { lat, lng } = e.latlng;
+
+      const data = {
+        lat,
+        lng,
+        zoom: map.getZoom(),
+      };
+
+      setMapState(data);
+      socket.emit("map-move", { roomId, data });
+
+      map.setView([lat, lng], map.getZoom(), {
+        animate: true,
+        duration: 0.3,
+      });
+    },
+  });
+
+  // 🔥 Live GPS tracking (Tracker only)
+  useEffect(() => {
+    if (role !== "tracker") return;
+
+    if (!navigator.geolocation) {
+      console.log("Geolocation not supported");
+      return;
+    }
+
+    gpsWatchRef.current = navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
 
         const data = {
-          lat,
-          lng,
+          lat: latitude,
+          lng: longitude,
           zoom: map.getZoom(),
         };
 
         setMapState(data);
+
+        map.setView([latitude, longitude], map.getZoom(), {
+          animate: true,
+          duration: 0.5,
+        });
+
         socket.emit("map-move", { roomId, data });
-
-        // Optional: center map to clicked position
-        map.setView([lat, lng], map.getZoom());
       },
-  });
+      (error) => {
+        console.log("GPS error:", error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 5000,
+      }
+    );
 
+    return () => {
+      if (gpsWatchRef.current) {
+        navigator.geolocation.clearWatch(gpsWatchRef.current);
+      }
+    };
+  }, [role, socket, roomId, map, setMapState]);
+
+  // 🔄 Sync for tracked users
   useEffect(() => {
     const handleSync = (data) => {
       if (role === "tracker") return;
