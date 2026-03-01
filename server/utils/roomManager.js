@@ -68,3 +68,15 @@ export const isTracker = (roomId, socketId) => {
   if (!room) return false;
   return room.tracker === socketId;
 };
+
+export const setRoomState = (roomId, data) => {
+  const room = rooms.get(roomId);
+  if (!room) return;
+  room.lastState = data;
+};
+
+export const getRoomState = (roomId) => {
+  const room = rooms.get(roomId);
+  if (!room) return null;
+  return room.lastState;
+};
