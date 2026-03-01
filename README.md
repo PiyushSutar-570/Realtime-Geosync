@@ -88,7 +88,7 @@ All map movements (pan, zoom, and click location) are synchronized instantly usi
 
 ---
 
-#images :
+##images :
 
 <img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/2d92057a-c1fb-4874-959a-7121f4f8afba" />
 
@@ -97,7 +97,8 @@ All map movements (pan, zoom, and click location) are synchronized instantly usi
 <img width="1919" height="919" alt="image" src="https://github.com/user-attachments/assets/8b2f7b79-44f9-421b-a1d9-8c3a638da264" />
 
 <br>
-#demo-videolink : https://drive.google.com/file/d/1z8tWco23yRd9_hCXCG3v98WsDNFpBNdW/view?usp=drivesdk
+<br>
+##demo-videolink : https://drive.google.com/file/d/1z8tWco23yRd9_hCXCG3v98WsDNFpBNdW/view?usp=drivesdk
 
 # 🛡️ Production-Ready Architecture
 
