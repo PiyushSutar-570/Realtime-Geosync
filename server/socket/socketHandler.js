@@ -13,9 +13,7 @@ export default function socketHandler(io) {
   io.on("connection", (socket) => {
     console.log("🔌 Connected:", socket.id);
 
-    // =========================
     // JOIN ROOM
-    // =========================
     socket.on("join-room", ({ roomId, role, name }) => {
       if (!roomId || !role || !name) {
         socket.emit("error-message", "Room ID, role and name required.");
@@ -56,16 +54,14 @@ export default function socketHandler(io) {
 
       io.to(roomId).emit("participants-update", users);
 
-      // 🔥 NEW: Send latest map state to newly joined user
+      //NEW: Send latest map state to newly joined user
       const lastState = getRoomState(roomId);
       if (lastState) {
         socket.emit("sync-map", lastState);
       }
     });
 
-    // =========================
     // MAP MOVE (TRACKER ONLY)
-    // =========================
     socket.on("map-move", ({ roomId, data }) => {
       if (!roomId || !data) return;
 
@@ -80,16 +76,14 @@ export default function socketHandler(io) {
       // Ensure only tracker can emit
       if (!isTracker(roomId, socket.id)) return;
 
-      // 🔥 Save latest map state in room
+      //Save latest map state in room
       setRoomState(roomId, data);
 
       // Broadcast to others in room
       socket.to(roomId).emit("sync-map", data);
     });
 
-    // =========================
     // DISCONNECT
-    // =========================
     socket.on("disconnect", () => {
       console.log("❌ Disconnected:", socket.id);
 
